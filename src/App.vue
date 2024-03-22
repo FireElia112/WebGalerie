@@ -1,15 +1,21 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <article id = title>
+     <h1>
+      Welcome to your Website Galerie
+    </h1>
+    <WebcamViewer/>
+  </article>
+ 
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import WebcamViewer from './components/WebcamViewer.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    WebcamViewer,
   }
 }
 </script>
@@ -22,5 +28,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.title{
+  position:fixed;
+  align-items: center;
 }
 </style>
