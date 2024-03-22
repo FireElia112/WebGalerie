@@ -2,7 +2,7 @@
   <div class="bg">  
     <div class="container">
       <div class="webcam">
-        <h1>Welcome to your Website Galerie</h1>
+        <h1>Welcome to your Website Gallery</h1>
         <video class="video" ref="video" autoplay ></video>
         <button  @click="takePhoto">
           <span id="edit-img"><img src="../assets/photo.png"></span>
@@ -72,7 +72,7 @@ h1 {
 .container {
   display: flex;
   flex-direction: column;
-  height: 90%;
+  height: 80%;
 }
 
 .webcam {
@@ -123,8 +123,8 @@ button {
   margin-top: 10px;
 }
 img {
-  width: 120px;
-  height: 80px;
+  width: 100px;
+  height: 60px;
   
 }
 #edit-img:hover img {
