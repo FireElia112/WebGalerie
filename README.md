@@ -1,4 +1,4 @@
-# foto-galerie
+# WebGalerie
 
 ## Project setup
 ```
