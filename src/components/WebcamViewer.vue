@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="webcam">
-      <video ref="video" autoplay></video><br>
+      <h1>Welcome to your Website Galerie</h1>
+      <video ref="video" autoplay></video>
       <button @click="takePhoto">Foto aufnehmen</button>
     </div>
     <div class="photos">
@@ -54,24 +55,23 @@ export default {
 <style scoped>
 .container {
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  height: 90%;
 }
 
 .webcam {
-  flex: 1;
   position: fixed;
   left: 0;
   top: 0;
   height: 100%;
+  width: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-left: 5%;
 }
 
 .photos {
-  flex: 1;
   margin-left: 50%;
   padding: 10px;
   overflow-y: auto;
@@ -82,8 +82,24 @@ export default {
 }
 
 .photo img {
-  width: 60%;
+  width: 50%;
   height: auto;
 }
-</style>
 
+
+@media screen and (max-width: 768px) {
+  .webcam, .photos {
+    width: 70%;
+    position: relative;
+    height: auto;
+  }
+
+  .webcam {
+    padding: 10px;
+  }
+
+  .photos {
+    margin-left: 0;
+  }
+}
+</style>
