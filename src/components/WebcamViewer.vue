@@ -2,7 +2,7 @@
   <div class="container">
     <div class="webcam">
       <h1>Welcome to your Website Galerie</h1>
-      <video ref="video" autoplay></video>
+      <video class="video" ref="video" autoplay ></video>
       <button @click="takePhoto">Foto aufnehmen</button>
     </div>
     <div class="photos">
@@ -37,6 +37,7 @@ export default {
     });
 
     const takePhoto = () => {
+      console.log(video.value)
       if (video.value) {
         const canvas = document.createElement('canvas');
         canvas.width = video.value.videoWidth;
@@ -84,6 +85,11 @@ export default {
 .photo img {
   width: 50%;
   height: auto;
+}
+.video {
+  border-style: dashed;
+  min-width: 200px;
+  max-width: 80% ;
 }
 
 
