@@ -3,7 +3,9 @@
     <div class="webcam">
       <h1>Welcome to your Website Galerie</h1>
       <video class="video" ref="video" autoplay ></video>
-      <button @click="takePhoto">Foto aufnehmen</button>
+      <button  @click="takePhoto">
+        <span id="edit-img"><img src="../assets/photo.png"></span>
+      </button>
     </div>
     <div class="photos">
       <div v-for="(photo, index) in photos" :key="index" class="photo">
@@ -64,7 +66,7 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
-  height: 100%;
+  height: 50%;
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -73,25 +75,36 @@ export default {
 }
 
 .photos {
-  margin-left: 50%;
+  width: 600px;
+  margin-left: 65%;
   padding: 10px;
   overflow-y: auto;
+  background-image: linear-gradient(rgb(63, 63, 63),black);
+  border-radius: 10px;
 }
 
 .photo {
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
 .photo img {
-  width: 50%;
+  padding-left: 0;
+  width: 80%;
   height: auto;
+  border-style: ridge;
+  border-width: 1px;
 }
 .video {
-  border-style: dashed;
-  min-width: 200px;
-  max-width: 80% ;
+  border-style: none;
 }
-
+.ima {
+  width: 90px;
+  height: 60px;
+}
+#edit-img:hover img {
+    -webkit-filter: invert(100%);
+}
 
 @media screen and (max-width: 768px) {
   .webcam, .photos {
