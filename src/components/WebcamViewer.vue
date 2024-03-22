@@ -1,15 +1,17 @@
 <template>
-  <div class="container">
-    <div class="webcam">
-      <h1>Welcome to your Website Galerie</h1>
-      <video class="video" ref="video" autoplay ></video>
-      <button  @click="takePhoto">
-        <span id="edit-img"><img src="../assets/photo.png"></span>
-      </button>
-    </div>
-    <div class="photos">
-      <div v-for="(photo, index) in photos" :key="index" class="photo">
-        <img :src="photo">
+  <div class="bg">  
+    <div class="container">
+      <div class="webcam">
+        <h1>Welcome to your Website Galerie</h1>
+        <video class="video" ref="video" autoplay ></video>
+        <button  @click="takePhoto">
+          <span id="edit-img"><img src="../assets/photo.png"></span>
+        </button>
+      </div>
+      <div class="photos" v-if="photos.length != 0">
+        <div v-for="(photo, index) in photos" :key="index" class="photo">
+          <img :src="photo">
+        </div>
       </div>
     </div>
   </div>
@@ -19,6 +21,11 @@
 import { ref, onMounted, reactive } from 'vue';
 
 export default {
+  data() {
+    return {
+      flag: false
+    }
+  },
   setup() {
     const video = ref(null);
     const photos = reactive([]);
@@ -49,13 +56,19 @@ export default {
         photos.unshift(canvas.toDataURL('image/png'));
       }
     };
-
     return { video, takePhoto, photos };
   }
 };
 </script>
 
 <style scoped>
+h1 {
+  background-color: white;
+  border-style: groove;
+  border-width: 10px;
+  font-size: 35px;
+  padding: 10px;
+}
 .container {
   display: flex;
   flex-direction: column;
@@ -66,7 +79,7 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
-  height: 50%;
+  height: 100%;
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -75,8 +88,8 @@ export default {
 }
 
 .photos {
-  width: 600px;
-  margin-left: 65%;
+  width: 40%;
+  margin-left: 55%;
   padding: 10px;
   overflow-y: auto;
   background-image: linear-gradient(rgb(63, 63, 63),black);
@@ -97,10 +110,22 @@ export default {
 }
 .video {
   border-style: none;
+  width: 80%;
+  border-radius: 10px;
+  border-style: groove;
+  border-width: 10px;
+
 }
-.ima {
-  width: 90px;
-  height: 60px;
+button {
+  border-style: solid;
+  border-width: 10px;
+  border-color: #2c3e50;
+  margin-top: 10px;
+}
+img {
+  width: 120px;
+  height: 80px;
+  
 }
 #edit-img:hover img {
     -webkit-filter: invert(100%);

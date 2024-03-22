@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article class="bg">
     
     <WebcamViewer/>
   </article>
@@ -27,7 +27,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
   align-items: center;
+
+
 }
-
-
+body {
+  background-image: url(./assets/pinnwand-transformed.png);
+}
 </style>
