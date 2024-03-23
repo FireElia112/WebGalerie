@@ -58,7 +58,7 @@ export default {
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
               }
-              // Nach erfolgreichem Hochladen, laden Sie die Fotos erneut vom Server.
+             
               this.loadPhotos();
             })
             .catch(error => {
@@ -75,10 +75,8 @@ export default {
     }
     let photos = await response.json();
 
-    // Sortieren Sie die Fotos nach dem Dateinamen
+    // Sortieren der Fotos nach Dateinamen in umgekehrter Reihenfolge
     photos = photos.sort((a, b) => a.filename.localeCompare(b.filename));
-
-    // Drehen Sie die Reihenfolge der Fotos um
     photos = photos.reverse();
 
     this.photos = photos;
@@ -93,7 +91,7 @@ export default {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          // Nach erfolgreichem Löschen, entfernen Sie das Foto aus der Liste.
+          // Nach erfolgreichem Löschen, entfernen des Fotos von Liste
           this.photos = this.photos.filter(photo => photo.filename !== filename);
         })
         .catch(error => {
