@@ -10,7 +10,7 @@
       </div>
       <div class="photos" v-if="photos.length != 0">
         <div v-for="(photo, index) in photos" :key="index" class="photo">
-          <img :src="photo">
+          <img :src="'data:image/jpeg;base64,' + photo.data">
         </div>
       </div>
     </div>
@@ -27,6 +27,7 @@ export default {
   },
   mounted() {
     this.initCamera();
+    this.loadPhotos();
   },
   methods: {
     async initCamera() {
@@ -46,12 +47,42 @@ export default {
         canvas.height = videoElement.videoHeight;
         const context = canvas.getContext('2d');
         context.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight);
-        this.photos.unshift(canvas.toDataURL('image/png'));
+        const photoDataUrl = canvas.toDataURL('image/jpeg');
+        this.photos.unshift({data: photoDataUrl.split(',')[1]});
+        canvas.toBlob(blob => {
+          const formData = new FormData();
+          formData.append('photo', blob, 'photo.jpeg');
+          fetch('http://localhost:3000/uploads', { method: 'POST', body: formData })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    // Sie können hier weitere Verarbeitungsschritte hinzufügen, wenn die Antwort verarbeitet werden muss.
+  })
+  .catch(error => {
+    console.error('Es gab einen Fehler beim Senden des Fotos: ', error);
+  });
+
+        }, 'image/jpeg');
       }
+    },
+    async loadPhotos() {
+    try {
+      const response = await fetch('http://localhost:3000/uploads');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const photos = await response.json();
+      this.photos = photos;
+    } catch (error) {
+      console.log('Es gab einen Fehler beim Laden der Fotos: ', error);
     }
   }
+}
 };
 </script>
+
+
 
 <style scoped>
 h1 {
