@@ -11,6 +11,7 @@
       <div class="photos" v-if="photos.length != 0">
         <div v-for="(photo, index) in photos" :key="index" class="photo">
           <img :src="'data:image/jpeg;base64,' + photo.data">
+          <br>
           <button @click="deletePhoto(photo.filename)">Foto löschen</button>
         </div>
       </div>
