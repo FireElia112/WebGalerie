@@ -11,6 +11,7 @@
       <div class="photos" v-if="photos.length != 0">
         <div v-for="(photo, index) in photos" :key="index" class="photo">
           <img :src="'data:image/jpeg;base64,' + photo.data">
+          <button @click="deletePhoto(photo.filename)">Foto löschen</button>
         </div>
       </div>
     </div>
@@ -47,40 +48,61 @@ export default {
         canvas.height = videoElement.videoHeight;
         const context = canvas.getContext('2d');
         context.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight);
-        const photoDataUrl = canvas.toDataURL('image/jpeg');
-        this.photos.unshift({data: photoDataUrl.split(',')[1]});
+        //const photoDataUrl = canvas.toDataURL('image/jpeg');
         canvas.toBlob(blob => {
           const formData = new FormData();
           formData.append('photo', blob, 'photo.jpeg');
           fetch('http://localhost:3000/uploads', { method: 'POST', body: formData })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    // Sie können hier weitere Verarbeitungsschritte hinzufügen, wenn die Antwort verarbeitet werden muss.
-  })
-  .catch(error => {
-    console.error('Es gab einen Fehler beim Senden des Fotos: ', error);
-  });
-
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              // Nach erfolgreichem Hochladen, laden Sie die Fotos erneut vom Server.
+              this.loadPhotos();
+            })
+            .catch(error => {
+              console.error('Es gab einen Fehler beim Senden des Fotos: ', error);
+            });
         }, 'image/jpeg');
       }
     },
     async loadPhotos() {
-    try {
-      const response = await fetch('http://localhost:3000/uploads');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const photos = await response.json();
-      this.photos = photos;
-    } catch (error) {
-      console.log('Es gab einen Fehler beim Laden der Fotos: ', error);
+  try {
+    const response = await fetch('http://localhost:3000/uploads');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    let photos = await response.json();
+
+    // Sortieren Sie die Fotos nach dem Dateinamen
+    photos = photos.sort((a, b) => a.filename.localeCompare(b.filename));
+
+    // Drehen Sie die Reihenfolge der Fotos um
+    photos = photos.reverse();
+
+    this.photos = photos;
+  } catch (error) {
+    console.log('Es gab einen Fehler beim Laden der Fotos: ', error);
   }
 }
+,
+    deletePhoto(filename) {
+      fetch(`http://localhost:3000/uploads/${filename}`, { method: 'DELETE' })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          // Nach erfolgreichem Löschen, entfernen Sie das Foto aus der Liste.
+          this.photos = this.photos.filter(photo => photo.filename !== filename);
+        })
+        .catch(error => {
+          console.error('Es gab einen Fehler beim Löschen des Fotos: ', error);
+        });
+    }
+  }
 };
 </script>
+
 
 
 
@@ -137,6 +159,7 @@ h1 {
   border-radius: 10px;
   border-style: groove;
   border-width: 10px;
+  background-color: rgba(0,0,0,0.8);
 
 }
 button {
