@@ -4,7 +4,7 @@
       <div class="webcam">
         <h1>Welcome to your Website Gallery</h1>
         <video class="video" ref="video" autoplay ></video>
-        <button  @click="takePhoto">
+        <button @click="takePhoto">
           <span id="edit-img"><img src="../assets/photo.png"></span>
         </button>
       </div>
@@ -18,45 +18,37 @@
 </template>
 
 <script>
-import { ref, onMounted, reactive } from 'vue';
-
 export default {
   data() {
     return {
-      flag: false
+      video: null,
+      photos: []
     }
   },
-  setup() {
-    const video = ref(null);
-    const photos = reactive([]);
-
-    onMounted(async () => {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          if (video.value) {
-            video.value.srcObject = stream;
-          }
-        } catch (err) {
-          console.log("Es gab einen Fehler beim Zugriff auf die Webcam: " + err);
-        }
-      } else {
-        console.log("Dieser Browser unterstützt den Zugriff auf die Webcam nicht.");
+  mounted() {
+    this.initCamera();
+  },
+  methods: {
+    async initCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        this.video = this.$refs.video;
+        this.video.srcObject = stream;
+      } catch (err) {
+        console.error("Es gab einen Fehler beim Zugriff auf die Webcam: ", err);
       }
-    });
-
-    const takePhoto = () => {
-      console.log(video.value)
-      if (video.value) {
+    },
+    takePhoto() {
+      const videoElement = this.$refs.video;
+      if (videoElement) {
         const canvas = document.createElement('canvas');
-        canvas.width = video.value.videoWidth;
-        canvas.height = video.value.videoHeight;
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
         const context = canvas.getContext('2d');
-        context.drawImage(video.value, 0, 0, video.value.videoWidth, video.value.videoHeight);
-        photos.unshift(canvas.toDataURL('image/png'));
+        context.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight);
+        this.photos.unshift(canvas.toDataURL('image/png'));
       }
-    };
-    return { video, takePhoto, photos };
+    }
   }
 };
 </script>
